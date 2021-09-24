@@ -111,6 +111,11 @@ mainRouter.get(`/search`, csrfProtection, async (req, res) => {
   }
 });
 
+const getSocket = async (req) => {
+  const io = req.app.get(`socketio`);
+  io.emit(`message`, `category`);
+};
+
 mainRouter.get(`/categories`, auth, csrfProtection, async (req, res) => {
   const {user} = req.session;
 
@@ -124,6 +129,9 @@ mainRouter.post(`/categories/add`, auth, csrfProtection, async (req, res) => {
 
   try {
     await api.createCategory({name: category});
+
+    getSocket(req);
+
     res.redirect(`/categories`);
   } catch (errors) {
     const errorMessages = errors.response.data.split(`\n`);
