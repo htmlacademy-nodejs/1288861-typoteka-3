@@ -31,16 +31,15 @@ class CategoryService {
         }]
       });
       return result.map((it) => it.get());
-    } else {
-      return this._Category.findAll({raw: true});
     }
+    return this._Category.findAll({raw: true});
   }
 
   async countByCategory(id) {
     const result = await this._PostCategory.findAll({
       where: {CategoryId: id}
     });
-    const count = result.map((it) => it.get()).length;
+    const count = result.length;
     return +count;
   }
 
